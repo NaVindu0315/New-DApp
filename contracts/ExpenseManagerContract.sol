@@ -13,13 +13,21 @@ contract ExpenseManagerContract {
         uint timestamp;
     }
 
+    Transaction[] public transactions;
+
     constructor(){
 
         owner = msg.sender;
 
     }
+    event  Deposit(address indexed _from,uint amount, string _reason, uint _timestamp);
 
-    function deposit(){
+    function deposit(uint _amount,string memory _reason)public payable{
+        require(_amount >0 ,"Depost amount should be greater than 0");
+        transactions.push(Transaction(msg.sender,_amount,_reason,block.timestamp));
+
+
+
 
     }
 
