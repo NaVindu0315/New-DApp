@@ -49,11 +49,15 @@ contract ExpenseManagerContract {
 
     }
 
-    function getTransactionsCount(){
+    function getTransactionsCount() public view returns (unit){
+        return transactions.length;
 
     }
 
-    function getTransaction(){
+    function getTransaction(uint _index) public view returns(address,uint,string memory,uint){
+        require(_index<transactions.length, "Index out of bounds");
+        Transaction memory transaction = transactions[_index];
+        return (transactions.user,transaction.amount,transaction.reason,transaction.timestamp);
 
     }
 
