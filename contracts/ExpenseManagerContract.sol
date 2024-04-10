@@ -61,8 +61,10 @@ contract ExpenseManagerContract {
 
     }
 
-    function getAllTransactions(){
-
+    function getAllTransactions() public view returns(address[] memory,uint[] memory, string[] memory, uint[] memory ){
+        address [] memory users = new address[](transactions.length);
+        uint [] memory amounts = new uint[](transactions.length);
+        string [] memory reasons = new address[](transactions.length);
     }
 
     function changeOwner(){
