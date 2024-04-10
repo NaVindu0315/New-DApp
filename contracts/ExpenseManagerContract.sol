@@ -43,7 +43,9 @@ contract ExpenseManagerContract {
         emit withdraw(msg.sender,_reason,block.timestamp);
     }
 
-    function getBalance(){
+    function getBalance(address _account) public view returns (uint ){
+
+        return balances[_account];
 
     }
 
