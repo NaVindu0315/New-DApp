@@ -21,10 +21,14 @@ contract ExpenseManagerContract {
 
     }
     event  Deposit(address indexed _from,uint amount, string _reason, uint _timestamp);
+    event  Withdraw(address indexed _to,uint amount, string _reason, uint _timestamp);
+
+
 
     function deposit(uint _amount,string memory _reason)public payable{
         require(_amount >0 ,"Depost amount should be greater than 0");
         transactions.push(Transaction(msg.sender,_amount,_reason,block.timestamp));
+        emit Deposit(msg.sender,_amount,_reason,block.timestamp);
 
 
 
