@@ -21,9 +21,9 @@ contract ExpenseManagerContract {
 
     }
 
-    function changeOwner(address _newOwner) pubic onlyOwner{
-        owner = _newOwner;
-
+    modifier onlyOwner(){
+        require (msg.sender == owner , "only owner can execute this ");
+        _;
     }
 
     mapping(address =>uint) public balances;
@@ -82,7 +82,10 @@ contract ExpenseManagerContract {
         return(users,amounts,reasons,timestamps);
     }
 
+    function changeOwner(address _newOwner) pubic onlyOwner{
+        owner = _newOwner;
 
+    }
 
 
 
