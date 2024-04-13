@@ -74,7 +74,7 @@ contract ExpenseManagerContract {
             reasons[i] = transactions[i].reason;
             timestamps[i] = transactions[i].timestamp;
         }
-        return
+        return(users,amounts,reasons,timestamps);
     }
 
     function changeOwner(){
