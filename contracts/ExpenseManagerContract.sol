@@ -21,6 +21,11 @@ contract ExpenseManagerContract {
 
     }
 
+    function changeOwner(address _newOwner) pubic onlyOwner{
+        owner = _newOwner;
+
+    }
+
     mapping(address =>uint) public balances;
 
     event  Depositevent(address indexed _from,uint amount, string _reason, uint _timestamp);
@@ -77,8 +82,8 @@ contract ExpenseManagerContract {
         return(users,amounts,reasons,timestamps);
     }
 
-    function changeOwner(){
 
-    }
+
+
 
 }
