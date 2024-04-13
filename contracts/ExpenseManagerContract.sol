@@ -64,7 +64,17 @@ contract ExpenseManagerContract {
     function getAllTransactions() public view returns(address[] memory,uint[] memory, string[] memory, uint[] memory ){
         address [] memory users = new address[](transactions.length);
         uint [] memory amounts = new uint[](transactions.length);
-        string [] memory reasons = new address[](transactions.length);
+        string [] memory reasons = new string[](transactions.length);
+        uint [] memory timestamps = new uint[](transactions.length);
+
+        for(uint i=0;i<transactions.length;i++)
+        {
+            users[i] = transactions[i].user;
+            amounts[i] = transactions[i].amount;
+            reasons[i] = transactions[i].reason;
+            timestamps[i] = transactions[i].timestamp;
+        }
+        return
     }
 
     function changeOwner(){
