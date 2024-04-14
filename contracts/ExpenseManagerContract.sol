@@ -1,92 +1,113 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.19;
 
 contract ExpenseManagerContract {
-
-
     address public owner;
 
-    struct Transaction{
-        address  user;
+    event Deposit(
+        address indexed _from,
+        uint _amount,
+        string _reason,
+        uint _timestamp
+    );
+    event Withdrawal(
+        address indexed _to,
+        uint _amount,
+        string _reason,
+        uint _timestamp
+    );
+
+    struct Transaction {
+        address user;
         uint amount;
         string reason;
         uint timestamp;
     }
 
+    mapping(address => uint) public balances;
     Transaction[] public transactions;
 
-    constructor(){
-
+    constructor() {
         owner = msg.sender;
-
     }
 
-    modifier onlyOwner(){
-        require (msg.sender == owner , "only owner can execute this ");
+    modifier onlyOwner() {
+        require(
+            msg.sender == owner,
+            "Only contract owner can call this function"
+        );
         _;
     }
 
-    mapping(address =>uint) public balances;
-
-    event  Depositevent(address indexed _from,uint amount, string _reason, uint _timestamp);
-    event  Withdraw(address indexed _to,uint amount, string _reason, uint _timestamp);
-
-
-
-    function deposit(uint _amount,string memory _reason)public payable{
-        require(_amount >0 ,"Depost amount should be greater than 0");
-        balances[msg.sender]+= amount;
-        transactions.push(Transaction(msg.sender,_amount,_reason,block.timestamp));
-        emit Depositevent(msg.sender,_amount,_reason,block.timestamp);
+    function deposit(uint _amount, string memory _reason) public payable {
+        require(_amount > 0, "Deposit amount must be greater than 0");
+        balances[msg.sender] += _amount;
+        transactions.push(
+            Transaction(msg.sender, _amount, _reason, block.timestamp)
+        );
+        emit Deposit(msg.sender, _amount, _reason, block.timestamp);
     }
 
-    function withdraw(uint _amount,string memory _reason) public{
-        require(balances[msg.sender]>= _amount,"Insufficent Balance");
+    function withdraw(uint _amount, string memory _reason) public {
+        require(balances[msg.sender] >= _amount, "Insufficient balance");
         balances[msg.sender] -= _amount;
-        transactions.push(Transaction(msg.sender,_amount,_reason,block.timestamp));
+        transactions.push(
+            Transaction(msg.sender, _amount, _reason, block.timestamp)
+        );
         payable(msg.sender).transfer(_amount);
-        emit withdraw(msg.sender,_reason,block.timestamp);
+        emit Withdrawal(msg.sender, _amount, _reason, block.timestamp);
     }
 
-    function getBalance(address _account) public view returns (uint ){
-
+    function getBalance(address _account) public view returns (uint) {
         return balances[_account];
-
     }
 
-    function getTransactionsCount() public view returns (unit){
+    function getTransactionsCount() public view returns (uint) {
         return transactions.length;
-
     }
 
-    function getTransaction(uint _index) public view returns(address,uint,string memory,uint){
-        require(_index<transactions.length, "Index out of bounds");
+    function getTransaction(
+        uint _index
+    ) public view returns (address, uint, string memory, uint) {
+        require(
+            _index < transactions.length,
+            "Transaction index out of bounds"
+        );
         Transaction memory transaction = transactions[_index];
-        return (transactions.user,transaction.amount,transaction.reason,transaction.timestamp);
-
+        return (
+        transaction.user,
+        transaction.amount,
+        transaction.reason,
+        transaction.timestamp
+        );
     }
 
-    function getAllTransactions() public view returns(address[] memory,uint[] memory, string[] memory, uint[] memory ){
-        address [] memory users = new address[](transactions.length);
-        uint [] memory amounts = new uint[](transactions.length);
-        string [] memory reasons = new string[](transactions.length);
-        uint [] memory timestamps = new uint[](transactions.length);
+    function getAllTransactions()
+    public
+    view
+    returns (
+        address[] memory,
+        uint[] memory,
+        string[] memory,
+        uint[] memory
+    )
+    {
+        address[] memory users = new address[](transactions.length);
+        uint[] memory amounts = new uint[](transactions.length);
+        string[] memory reasons = new string[](transactions.length);
+        uint[] memory timestamps = new uint[](transactions.length);
 
-        for(uint i=0;i<transactions.length;i++)
-        {
+        for (uint i = 0; i < transactions.length; i++) {
             users[i] = transactions[i].user;
             amounts[i] = transactions[i].amount;
             reasons[i] = transactions[i].reason;
             timestamps[i] = transactions[i].timestamp;
         }
-        return(users,amounts,reasons,timestamps);
+
+        return (users, amounts, reasons, timestamps);
     }
 
-    function changeOwner(address _newOwner) pubic onlyOwner{
+    function changeOwner(address _newOwner) public onlyOwner {
         owner = _newOwner;
-
     }
-
-
-
 }
